@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>Telegram Bot API 測試</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .input-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; }
+        input, textarea { width: 100%; padding: 8px; box-sizing: border-box; }
+        button { padding: 10px 15px; background-color: #007BFF; color: white; border: none; cursor: pointer; }
+        button:hover { background-color: #0056b3; }
+        pre { background-color: #f8f9fa; padding: 10px; border: 1px solid #ddd; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Telegram Bot API 測試</h1>
+        <div class="input-group">
+            <label for="token">API Token</label>
+            <input type="text" id="token" placeholder="輸入你的 API Token">
+        </div>
+        <div class="input-group">
+            <label for="chatId">Chat ID</label>
+            <input type="text" id="chatId" placeholder="輸入 Chat ID (指定一個聊天室ID)">
+        </div>
+        <div class="input-group">
+            <label for="message">訊息</label>
+            <textarea id="message" rows="4" placeholder="輸入要發送的訊息"></textarea>
+        </div>
+        <button onclick="sendMessage()">發送訊息</button>
+        <button onclick="getMe()">取得機器人資訊</button>
+        <button onclick="getChat()">取得聊天資訊</button>
+        <button onclick="getUpdates()">取得更新</button>
+        <pre id="response"></pre>
+    </div>
+
+    <script>
+        async function sendMessage() {
+            const token = document.getElementById('token').value;
+            const chatId = document.getElementById('chatId').value;
+            const message = document.getElementById('message').value;
+            const url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+            const response = await fetch(url);
+            const data = await response.json();
+            document.getElementById('response').textContent = JSON.stringify(data, null, 2);
+        }
+
+        async function getMe() {
+            const token = document.getElementById('token').value;
+            const url = `https://api.telegram.org/bot${token}/getMe`;
+            const response = await fetch(url);
+            const data = await response.json();
+            document.getElementById('response').textContent = JSON.stringify(data, null, 2);
+        }
+
+        async function getChat() {
+            const token = document.getElementById('token').value;
+            const chatId = document.getElementById('chatId').value;
+            const url = `https://api.telegram.org/bot${token}/getChat?chat_id=${chatId}`;
+            const response = await fetch(url);
+            const data = await response.json();
+            document.getElementById('response').textContent = JSON.stringify(data, null, 2);
+        }
+
+        async function getUpdates() {
+            const token = document.getElementById('token').value;
+            const url = `https://api.telegram.org/bot${token}/getUpdates`;
+            const response = await fetch(url);
+            const data = await response.json();
+            document.getElementById('response').textContent = JSON.stringify(data, null, 2);
+        }
+    </script>
+</body>
+</html>
